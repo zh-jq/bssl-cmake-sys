@@ -1,2 +1,4 @@
 target/
 Cargo.lock
+
+third_party/boringssl/crypto_test_data.cc
