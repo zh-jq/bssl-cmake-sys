@@ -8,7 +8,7 @@ The vendored BoringSSL code is incorperated to the CMake build system, which mea
 
 ## Release Support
 
-The version will always be 0.1.YYYYMMDD.
+The version will always be 0.1.YYMMDDN.
 
 We will pull in changes from BoringSSL main branch weekly, but it's not guranteed.
 
