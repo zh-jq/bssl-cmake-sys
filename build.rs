@@ -57,8 +57,8 @@ const OSSL_CONF_DEFINES: &[&str] = &[
 fn main() {
     let crate_dir = env::var("CARGO_MANIFEST_DIR").unwrap();
     let src_dir = Path::new(&crate_dir);
-    let boringssl_src_dir = src_dir.join("third_party/boringssl");
-    let include_dir = boringssl_src_dir.join("src/include");
+    let boringssl_src_dir = src_dir.join("third_party").join("boringssl");
+    let include_dir = boringssl_src_dir.join("src").join("include");
 
     let out_dir = env::var("OUT_DIR").unwrap();
     let bindgen_file = Path::new(&out_dir).join("bindgen.rs");
@@ -115,10 +115,11 @@ fn main() {
         .build_target("ssl")
         .build();
 
+    let lib_search_dir = Path::new(&boringssl_build_dir).join("build");
     // set link options
     println!(
-        "cargo:rustc-link-search=native={}/build",
-        boringssl_build_dir.display()
+        "cargo:rustc-link-search=native={}",
+        lib_search_dir.display()
     );
     println!("cargo:rustc-link-lib=static=crypto");
     println!("cargo:rustc-link-lib=static=ssl");
