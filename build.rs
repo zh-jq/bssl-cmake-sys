@@ -111,6 +111,7 @@ fn main() {
     // build BoringSSL code
     println!("cargo:rerun-if-changed={}", boringssl_src_dir.display());
     let boringssl_build_dir = cmake::Config::new(boringssl_src_dir)
+        .generator("Ninja")
         .build_target("crypto")
         .build_target("ssl")
         .build();
