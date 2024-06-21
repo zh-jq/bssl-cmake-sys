@@ -57,8 +57,8 @@ const OSSL_CONF_DEFINES: &[&str] = &[
 fn main() {
     let crate_dir = env::var("CARGO_MANIFEST_DIR").unwrap();
     let src_dir = Path::new(&crate_dir);
-    let boringssl_src_dir = src_dir.join("third_party").join("boringssl");
-    let include_dir = boringssl_src_dir.join("src").join("include");
+    let boringssl_src_dir = src_dir.join("boringssl");
+    let include_dir = boringssl_src_dir.join("include");
 
     let out_dir = env::var("OUT_DIR").unwrap();
     let bindgen_file = Path::new(&out_dir).join("bindgen.rs");
