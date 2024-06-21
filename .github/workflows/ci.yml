@@ -23,9 +23,31 @@ jobs:
         rust:
           - stable
           - beta
-          - nightly
     runs-on: ${{ matrix.os }}
     steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: Install ${{ matrix.rust }} toolchain
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ matrix.rust }}
+      - name: Cargo build
+        run: cargo build
+  build-win:
+    name: Build Win
+    strategy:
+      matrix:
+        rust:
+          - stable
+          - beta
+    runs-on: windows-latest
+    steps:
+      - name: Install nasm
+        run: choco install nasm
+      - name: Install ninja
+        run: choco install ninja
       - name: Checkout sources
         uses: actions/checkout@v4
         with:
