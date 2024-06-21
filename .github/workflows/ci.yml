@@ -45,7 +45,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Install nasm
-        uses: ilammy/setup-nasm@v1
+        run: choco install nasm
       - name: Install ninja
         run: choco install ninja
       - name: Checkout sources
