@@ -76,13 +76,8 @@ fn main() {
         .file("rust_wrapper.c")
         .compile("rustc_wrapper");
 
-    // libssl requires a C++ runtime, such as libstdc++ or libc++
-    println!("cargo:rerun-if-changed=link_runtime.cpp");
-    cc::Build::new()
-        .cargo_metadata(true)
-        .cpp(true)
-        .file("link_runtime.cpp")
-        .compile("link_runtime");
+    #[cfg(not(windows))]
+    link_cxx_runtime();
 
     // bindgen
     let binding = bindgen::Builder::default()
@@ -127,4 +122,15 @@ fn main() {
 
     // OSSL CONF
     println!("cargo:conf={}", OSSL_CONF_DEFINES.join(","));
+}
+
+#[cfg(not(windows))]
+fn link_cxx_runtime() {
+    // libssl requires a C++ runtime, such as libstdc++ or libc++
+    println!("cargo:rerun-if-changed=link_runtime.cpp");
+    cc::Build::new()
+        .cargo_metadata(true)
+        .cpp(true)
+        .file("link_runtime.cpp")
+        .compile("link_runtime");
 }
