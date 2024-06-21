@@ -110,11 +110,11 @@ fn main() {
 
     // build BoringSSL code
     println!("cargo:rerun-if-changed={}", boringssl_src_dir.display());
-    let boringssl_build_dir = cmake::Config::new(boringssl_src_dir)
-        .generator("Ninja")
-        .build_target("crypto")
-        .build_target("ssl")
-        .build();
+    let mut cmake_config = cmake::Config::new(boringssl_src_dir);
+    cmake_config.build_target("crypto").build_target("ssl");
+    #[cfg(windows)]
+    cmake_config.generator("Ninja");
+    let boringssl_build_dir = cmake_config.build();
 
     let lib_search_dir = Path::new(&boringssl_build_dir).join("build");
     // set link options
