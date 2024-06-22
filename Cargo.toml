@@ -1,6 +1,6 @@
 [package]
 name = "bssl-cmake-sys"
-version = "0.1.2406172"
+version = "0.1.2406173"
 license = "Apache-2.0"
 edition = "2021"
 description = "FFI bindings to BoringSSL (cmake incorporated)"
