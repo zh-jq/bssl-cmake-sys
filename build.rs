@@ -109,6 +109,8 @@ fn main() {
     cmake_config.build_target("crypto").build_target("ssl");
     #[cfg(windows)]
     cmake_config.generator("Ninja");
+    #[cfg(target_env = "msvc")]
+    select_msvc_crt(&mut cmake_config);
     let boringssl_build_dir = cmake_config.build();
 
     let lib_search_dir = Path::new(&boringssl_build_dir).join("build");
@@ -133,4 +135,14 @@ fn link_cxx_runtime() {
         .cpp(true)
         .file("link_runtime.cpp")
         .compile("link_runtime");
+}
+
+#[cfg(target_env = "msvc")]
+fn select_msvc_crt(cmake_config: &mut cmake::Config) {
+    let linkage = env::var("CARGO_CFG_TARGET_FEATURE").unwrap_or_default();
+    if linkage.contains("crt-static") {
+        cmake_config.define("CMAKE_MSVC_RUNTIME_LIBRARY", "MultiThreaded");
+    } else {
+        cmake_config.define("CMAKE_MSVC_RUNTIME_LIBRARY", "MultiThreadedDLL");
+    }
 }
