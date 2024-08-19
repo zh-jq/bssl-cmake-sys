@@ -4,6 +4,8 @@
 #![allow(improper_ctypes)]
 #![allow(clippy::useless_transmute)]
 #![allow(clippy::too_many_arguments)]
+#![allow(clippy::unnecessary_operation)]
+#![allow(clippy::identity_op)]
 
 // Set in build.rs
 include!(env!("BSSL_BINDGEN_RS_FILE"));
