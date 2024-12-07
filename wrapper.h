@@ -66,6 +66,7 @@
 #include <openssl/safestack.h>
 #include <openssl/sha.h>
 #include <openssl/siphash.h>
+#include <openssl/slhdsa.h>
 #include <openssl/span.h>
 #include <openssl/srtp.h>
 #include <openssl/ssl.h>
@@ -77,5 +78,3 @@
 #include <openssl/x509.h>
 #include <openssl/x509_vfy.h>
 #include <openssl/x509v3.h>
-
-#include "rust_wrapper.h"

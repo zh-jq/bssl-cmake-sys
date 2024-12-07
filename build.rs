@@ -65,17 +65,6 @@ fn main() {
 
     let target = env::var("TARGET").unwrap();
 
-    // TODO switch to bindgen's static inline support after bindgen get rid of winapi
-    // see https://github.com/google/boringssl/commit/cb47fdc0e18b771e669882c865c6db81e3bd6bb4
-    // compile rust_wrapper
-    println!("cargo:rerun-if-changed=rust_wrapper.c");
-    println!("cargo:rerun-if-changed=rust_wrapper.h");
-    cc::Build::new()
-        .cargo_metadata(true)
-        .include(&include_dir)
-        .file("rust_wrapper.c")
-        .compile("rustc_wrapper");
-
     #[cfg(not(windows))]
     link_cxx_runtime();
 
@@ -84,11 +73,12 @@ fn main() {
         .header("wrapper.h")
         .derive_default(false)
         .enable_function_attribute_detection()
+        .wrap_static_fns(true)
+        .wrap_static_fns_path("wrapper.c")
         .use_core()
         .default_macro_constant_type(MacroTypeVariation::Signed)
         .rustified_enum("point_conversion_form_t")
         .allowlist_file(".*[[:punct:]]include[[:punct:]]openssl[[:punct:]].*\\.h")
-        .allowlist_file(".*[[:punct:]]rust_wrapper\\.h")
         .clang_args([
             format!("-I{}", include_dir.display()),
             format!("--target={target}"),
@@ -98,10 +88,14 @@ fn main() {
     binding
         .write_to_file(&bindgen_file)
         .expect("failed to write bindgen file");
-    println!(
-        "cargo:rustc-env=BSSL_BINDGEN_RS_FILE={}",
-        bindgen_file.display()
-    );
+
+    println!("cargo:rerun-if-changed=wrapper.c");
+    println!("cargo:rerun-if-changed=wrapper.h");
+    cc::Build::new()
+        .cargo_metadata(true)
+        .include(&include_dir)
+        .file("wrapper.c")
+        .compile("rustc_wrapper");
 
     // build BoringSSL code
     println!("cargo:rerun-if-changed={}", boringssl_src_dir.display());
