@@ -61,7 +61,13 @@ fn main() {
     let include_dir = boringssl_src_dir.join("src").join("include");
 
     let out_dir = env::var("OUT_DIR").unwrap();
-    let bindgen_file = Path::new(&out_dir).join("bindgen.rs");
+    let out_dir = Path::new(&out_dir);
+    let bindgen_file = out_dir.join("bindgen.rs");
+
+    let wrapper_header_src = src_dir.join("wrapper.h");
+    let wrapper_header_dst = out_dir.join("wrapper.h");
+    std::fs::copy(wrapper_header_src, wrapper_header_dst).unwrap();
+    let wrapper_source = out_dir.join("wrapper.c");
 
     let target = env::var("TARGET").unwrap();
 
@@ -74,7 +80,7 @@ fn main() {
         .derive_default(false)
         .enable_function_attribute_detection()
         .wrap_static_fns(true)
-        .wrap_static_fns_path("wrapper.c")
+        .wrap_static_fns_path(&wrapper_source)
         .use_core()
         .default_macro_constant_type(MacroTypeVariation::Signed)
         .rustified_enum("point_conversion_form_t")
@@ -94,7 +100,7 @@ fn main() {
     cc::Build::new()
         .cargo_metadata(true)
         .include(&include_dir)
-        .file("wrapper.c")
+        .file(wrapper_source)
         .compile("rustc_wrapper");
 
     // build BoringSSL code
