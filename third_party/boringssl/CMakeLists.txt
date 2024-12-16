@@ -340,7 +340,6 @@ add_library(
   src/crypto/dh_extra/dh_asn1.cc
   src/crypto/dh_extra/params.cc
   src/crypto/digest_extra/digest_extra.cc
-  src/crypto/dilithium/dilithium.cc
   src/crypto/dsa/dsa.cc
   src/crypto/dsa/dsa_asn1.cc
   src/crypto/ec_extra/ec_asn1.cc
@@ -426,13 +425,6 @@ add_library(
   src/crypto/slhdsa/slhdsa.cc
   src/crypto/slhdsa/thash.cc
   src/crypto/slhdsa/wots.cc
-  src/crypto/spx/spx.cc
-  src/crypto/spx/spx_address.cc
-  src/crypto/spx/spx_fors.cc
-  src/crypto/spx/spx_merkle.cc
-  src/crypto/spx/spx_thash.cc
-  src/crypto/spx/spx_util.cc
-  src/crypto/spx/spx_wots.cc
   src/crypto/stack/stack.cc
   src/crypto/thread.cc
   src/crypto/thread_none.cc
